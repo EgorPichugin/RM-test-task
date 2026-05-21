@@ -19,6 +19,7 @@ from src.services.object_structure_validator import (
     ObjectStructureValidationError,
     ObjectStructureValidator,
 )
+from src.services.precheck_service import PreCheckService
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,6 +58,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         object_structure_validator=ObjectStructureValidator(),
         customer_identity_validator=CustomerIdentityValidator(),
         context_extractor=ContextExtractor(),
+        precheck_service=PreCheckService(),
     )
 
     try:

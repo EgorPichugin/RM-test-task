@@ -9,6 +9,7 @@ from dotenv import dotenv_values
 
 from src.config.settings import (
     ANTHROPIC_KEY_ENV_KEY,
+    DEFAULT_FILES_PATH,
     DEFAULT_MODEL,
     ENV_FILE_PATH,
     FILES_PATH_ENV_KEY,
@@ -31,7 +32,6 @@ class EnvValidationResult:
 
 class EnvValidator:
     REQUIRED_ENV_KEYS = (
-        FILES_PATH_ENV_KEY,
         ANTHROPIC_KEY_ENV_KEY,
     )
 
@@ -62,9 +62,11 @@ class EnvValidator:
                 f"{', '.join(missing_keys)}"
             )
 
-        files_path = self._normalize_path(str(env_values[FILES_PATH_ENV_KEY]))
+        files_path = self._resolve_files_path(env_values.get(FILES_PATH_ENV_KEY))
         anthropic_key = str(env_values[ANTHROPIC_KEY_ENV_KEY]).strip()
         model = self._resolve_model(env_values.get(MODEL_ENV_KEY))
+        os.environ[FILES_PATH_ENV_KEY] = str(files_path)
+        os.environ[ANTHROPIC_KEY_ENV_KEY] = anthropic_key
         os.environ[MODEL_ENV_KEY] = model
 
         logger.info('Configured files path: "%s"', files_path)
@@ -75,6 +77,18 @@ class EnvValidator:
             anthropic_key=anthropic_key,
             model=model,
         )
+
+    def _resolve_files_path(self, value: object) -> Path:
+        if self._has_value(value):
+            return self._normalize_path(str(value))
+
+        default_files_path = DEFAULT_FILES_PATH.resolve(strict=False)
+        logger.warning(
+            'Environment value "%s" is missing or empty. Using default files path "%s"',
+            FILES_PATH_ENV_KEY,
+            default_files_path,
+        )
+        return default_files_path
 
     def _resolve_model(self, value: object) -> str:
         if self._has_value(value):

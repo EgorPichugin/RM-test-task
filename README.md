@@ -28,6 +28,12 @@ Inbound sample:
 python main.py aircall_sample_call.json smartmoving_sample_opportunity.json --pretty
 ```
 
+Inbound sample where SmartMoving already contains the Aircall details and should return `0` findings:
+
+```bash
+python main.py aircall_sample_call.json smartmoving_sample_opportunity_without_missing_details.json --pretty
+```
+
 Outbound sample:
 
 ```bash

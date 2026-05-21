@@ -89,34 +89,32 @@ direction-aware precheck rules
 
 The default model is Claude Haiku 4.5. Anthropic lists Haiku 4.5 pricing at **$1 per million input tokens** and **$5 per million output tokens**.
 
-Current prompt size for the inbound sample is about:
+Based on the request logs shown for 10 recent calls:
 
 ```text
-system prompt: 333 characters
-user prompt:   6,498 characters
-total:         6,831 characters
+total input tokens:  18,469
+total output tokens:  6,905
 ```
 
-Using the rough estimate of 4 characters per token:
+Average token usage per call:
 
 ```text
-6,831 / 4 ~= 1,708 input tokens per call
+input:  18,469 / 10 ~= 1,847 tokens
+output:  6,905 / 10 ~=   691 tokens
 ```
-
-Assume each response is around 700 output tokens.
 
 Estimated cost per call:
 
 ```text
-input:  1,708 / 1,000,000 * $1 ~= $0.0017
-output:   700 / 1,000,000 * $5 ~= $0.0035
-total:                         ~= $0.0052
+input:  1,847 / 1,000,000 * $1 ~= $0.0018
+output:   691 / 1,000,000 * $5 ~= $0.0035
+total:                         ~= $0.0053
 ```
 
 Estimated cost per 1,000 calls:
 
 ```text
-~$5.20 per 1,000 calls
+~$5.30 per 1,000 calls
 ```
 
 With larger transcripts or CRM objects, I would budget a safer range of **$5-$10 per 1,000 calls**. Prompt caching or batch processing could reduce this further.

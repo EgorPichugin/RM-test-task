@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
-from src.services.file_path_validator import FilePathValidator
-from src.services.object_structure_validator import ObjectStructureValidator
+from src.services.context_extractor import ContextExtractor, ExtractedContext
+from src.services.customer_identity_validator import CustomerIdentityValidator
+from src.services.file_path_validator import FilePathValidationResult, FilePathValidator
+from src.services.object_structure_validator import ObjectStructureValidationResult, ObjectStructureValidator
 
 
 @dataclass(frozen=True)
@@ -12,6 +15,7 @@ class MainManagerResult:
     input_files: list[Path]
     aircall_file: Path
     smartmoving_file: Path
+    llm_context: dict[str, Any]
     findings: list[dict[str, str]]
 
     def to_dict(self) -> dict[str, object]:
@@ -19,6 +23,7 @@ class MainManagerResult:
             "input_files": [str(path) for path in self.input_files],
             "aircall_file": str(self.aircall_file),
             "smartmoving_file": str(self.smartmoving_file),
+            "llm_context": self.llm_context,
             "findings": self.findings,
         }
 
@@ -28,19 +33,39 @@ class MainManagerService:
         self,
         file_path_validator: FilePathValidator,
         object_structure_validator: ObjectStructureValidator,
+        customer_identity_validator: CustomerIdentityValidator,
+        context_extractor: ContextExtractor,
     ) -> None:
         self.file_path_validator = file_path_validator
         self.object_structure_validator = object_structure_validator
+        self.customer_identity_validator = customer_identity_validator
+        self.context_extractor = context_extractor
 
     def run(self, input_files: list[Path]) -> MainManagerResult:
-        file_path_result = self.file_path_validator.validate(input_files)
-        object_structure_result = self.object_structure_validator.validate(
+        # check file paths and resolve them
+        file_path_result: FilePathValidationResult = self.file_path_validator.validate(input_files)
+
+        # check files structure aircall or smartmoving
+        object_structure_result: ObjectStructureValidationResult = self.object_structure_validator.validate(
             file_path_result.resolved_files,
+        )
+
+        # check that Aircall contact and SmartMoving customer are the same person
+        self.customer_identity_validator.validate(
+            aircall_data=object_structure_result.aircall_data,
+            smartmoving_data=object_structure_result.smartmoving_data,
+        )
+
+        # extract context for LLM
+        extracted_context: ExtractedContext = self.context_extractor.extract(
+            aircall_data=object_structure_result.aircall_data,
+            smartmoving_data=object_structure_result.smartmoving_data,
         )
 
         return MainManagerResult(
             input_files=file_path_result.resolved_files,
             aircall_file=object_structure_result.aircall_file,
             smartmoving_file=object_structure_result.smartmoving_file,
+            llm_context=extracted_context.to_dict(),
             findings=[],
         )

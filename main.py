@@ -7,6 +7,12 @@ from pathlib import Path
 from typing import Sequence
 
 from src.config.logging_config import setup_logging
+from src.services.context_extractor import ContextExtractionError, ContextExtractor
+from src.services.customer_identity_validator import (
+    CustomerIdentityValidationError,
+    CustomerIdentityValidator,
+)
+from src.services.env_validator import EnvValidationError, EnvValidator
 from src.services.file_path_validator import FilePathValidationError, FilePathValidator
 from src.services.main_manager import MainManagerService
 from src.services.object_structure_validator import (
@@ -40,14 +46,27 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    try:
+        env_result = EnvValidator().validate()
+    except EnvValidationError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+
     manager = MainManagerService(
-        file_path_validator=FilePathValidator(),
+        file_path_validator=FilePathValidator(base_path=env_result.files_path),
         object_structure_validator=ObjectStructureValidator(),
+        customer_identity_validator=CustomerIdentityValidator(),
+        context_extractor=ContextExtractor(),
     )
 
     try:
         result = manager.run(args.input_files)
-    except (FilePathValidationError, ObjectStructureValidationError) as error:
+    except (
+        FilePathValidationError,
+        ObjectStructureValidationError,
+        CustomerIdentityValidationError,
+        ContextExtractionError,
+    ) as error:
         print(str(error), file=sys.stderr)
         return 1
 

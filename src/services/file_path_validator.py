@@ -1,13 +1,8 @@
 from __future__ import annotations
 
 import logging
-import os
 from dataclasses import dataclass
 from pathlib import Path
-
-from dotenv import load_dotenv
-
-from src.config.settings import ENV_FILE_PATH, FILES_PATH_ENV_KEY
 
 logger = logging.getLogger("PathValidator")
 
@@ -23,16 +18,11 @@ class FilePathValidationError(Exception):
 
 
 class FilePathValidator:
-    def __init__(
-        self,
-        env_path: Path = ENV_FILE_PATH,
-        env_key: str = FILES_PATH_ENV_KEY,
-    ) -> None:
-        self.env_path = env_path
-        self.env_key = env_key
+    def __init__(self, base_path: Path) -> None:
+        self.base_path = base_path
 
     def validate(self, input_files: list[Path]) -> FilePathValidationResult:
-        base_path = self._read_base_path()
+        base_path = self.base_path
         self._validate_base_path(base_path)
 
         resolved_files = [
@@ -60,20 +50,6 @@ class FilePathValidator:
             base_path=base_path,
             resolved_files=resolved_files,
         )
-
-    def _read_base_path(self) -> Path:
-        if not self.env_path.is_file():
-            logger.error('Environment file not found: "%s"', self.env_path)
-            raise FilePathValidationError(
-                f'File or files are not found in the provided path "{self.env_path}"'
-            )
-
-        logger.info('Loading environment file: "%s"', self.env_path)
-        load_dotenv(self.env_path)
-        raw_base_path = os.getenv(self.env_key, "")
-        base_path = self._normalize_path(raw_base_path)
-        logger.info('Configured files path: "%s"', base_path)
-        return base_path
 
     def _validate_base_path(self, base_path: Path) -> None:
         if not self._is_directory(base_path):

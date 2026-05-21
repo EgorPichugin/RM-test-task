@@ -7,6 +7,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from src.models.external_data import AircallData, SmartMovingData
+from src.services.external_data_mapper import ExternalDataMapper
+
 logger = logging.getLogger("ObjectStructureValidator")
 
 
@@ -14,7 +17,7 @@ class ObjectStructureValidationError(Exception):
     pass
 
 
-class ObjectType(str, Enum):
+class EObjectType(str, Enum):
     AIRCALL = "aircall"
     SMARTMOVING = "smartmoving"
     UNKNOWN = "unknown"
@@ -24,11 +27,14 @@ class ObjectType(str, Enum):
 class ObjectStructureValidationResult:
     aircall_file: Path
     smartmoving_file: Path
-    aircall_data: dict[str, Any]
-    smartmoving_data: dict[str, Any]
+    aircall_data: AircallData
+    smartmoving_data: SmartMovingData
 
 
 class ObjectStructureValidator:
+    def __init__(self, data_mapper: ExternalDataMapper | None = None) -> None:
+        self.data_mapper = data_mapper or ExternalDataMapper()
+
     def validate(self, input_files: list[Path]) -> ObjectStructureValidationResult:
         logger.info("Validating object structures for %s file(s)", len(input_files))
 
@@ -40,17 +46,17 @@ class ObjectStructureValidator:
         aircall_matches = [
             detected
             for detected in detected_objects
-            if detected.object_type == ObjectType.AIRCALL
+            if detected.object_type == EObjectType.AIRCALL
         ]
         smartmoving_matches = [
             detected
             for detected in detected_objects
-            if detected.object_type == ObjectType.SMARTMOVING
+            if detected.object_type == EObjectType.SMARTMOVING
         ]
         invalid_matches = [
             detected
             for detected in detected_objects
-            if detected.object_type == ObjectType.UNKNOWN
+            if detected.object_type == EObjectType.UNKNOWN
         ]
 
         if invalid_matches:
@@ -78,8 +84,8 @@ class ObjectStructureValidator:
         return ObjectStructureValidationResult(
             aircall_file=aircall_matches[0].file_path,
             smartmoving_file=smartmoving_matches[0].file_path,
-            aircall_data=aircall_matches[0].data,
-            smartmoving_data=smartmoving_matches[0].data,
+            aircall_data=self.data_mapper.map_aircall(aircall_matches[0].data),
+            smartmoving_data=self.data_mapper.map_smartmoving(smartmoving_matches[0].data),
         )
 
     def _detect_file_structure(self, file_path: Path) -> "_DetectedObject":
@@ -88,15 +94,15 @@ class ObjectStructureValidator:
 
         if self._is_aircall_object(data):
             logger.info('Detected Aircall structure in "%s"', file_path)
-            return _DetectedObject(file_path, ObjectType.AIRCALL, data)
+            return _DetectedObject(file_path, EObjectType.AIRCALL, data)
 
         if self._is_smartmoving_object(data):
             logger.info('Detected SmartMoving structure in "%s"', file_path)
-            return _DetectedObject(file_path, ObjectType.SMARTMOVING, data)
+            return _DetectedObject(file_path, EObjectType.SMARTMOVING, data)
 
         logger.warning('Unknown object structure in "%s"', file_path)
         logger.debug('Top-level keys in "%s": %s', file_path, sorted(data.keys()))
-        return _DetectedObject(file_path, ObjectType.UNKNOWN, data)
+        return _DetectedObject(file_path, EObjectType.UNKNOWN, data)
 
     @staticmethod
     def _load_json(file_path: Path) -> dict[str, Any]:
@@ -206,5 +212,5 @@ class ObjectStructureValidator:
 @dataclass(frozen=True)
 class _DetectedObject:
     file_path: Path
-    object_type: ObjectType
+    object_type: EObjectType
     data: dict[str, Any]

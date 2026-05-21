@@ -1,0 +1,97 @@
+from __future__ import annotations
+
+import logging
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+from dotenv import dotenv_values
+
+from src.config.settings import (
+    ANTHROPIC_KEY_ENV_KEY,
+    DEFAULT_MODEL,
+    ENV_FILE_PATH,
+    FILES_PATH_ENV_KEY,
+    MODEL_ENV_KEY,
+)
+
+logger = logging.getLogger("EnvValidator")
+
+
+class EnvValidationError(Exception):
+    pass
+
+
+@dataclass(frozen=True)
+class EnvValidationResult:
+    files_path: Path
+    anthropic_key: str
+    model: str
+
+
+class EnvValidator:
+    REQUIRED_ENV_KEYS = (
+        FILES_PATH_ENV_KEY,
+        ANTHROPIC_KEY_ENV_KEY,
+    )
+
+    def __init__(self, env_path: Path = ENV_FILE_PATH) -> None:
+        self.env_path = env_path
+
+    def validate(self) -> EnvValidationResult:
+        logger.info('Validating environment values from "%s"', self.env_path)
+
+        if not self.env_path.is_file():
+            logger.error('Environment file not found: "%s"', self.env_path)
+            raise EnvValidationError(f'Environment file "{self.env_path}" is not found')
+
+        env_values = dotenv_values(self.env_path)
+        missing_keys = [
+            env_key
+            for env_key in self.REQUIRED_ENV_KEYS
+            if not self._has_value(env_values.get(env_key))
+        ]
+
+        if missing_keys:
+            logger.error(
+                "Missing required environment value(s): %s",
+                ", ".join(missing_keys),
+            )
+            raise EnvValidationError(
+                "Missing required environment value(s): "
+                f"{', '.join(missing_keys)}"
+            )
+
+        files_path = self._normalize_path(str(env_values[FILES_PATH_ENV_KEY]))
+        anthropic_key = str(env_values[ANTHROPIC_KEY_ENV_KEY]).strip()
+        model = self._resolve_model(env_values.get(MODEL_ENV_KEY))
+        os.environ[MODEL_ENV_KEY] = model
+
+        logger.info('Configured files path: "%s"', files_path)
+        logger.info('Configured model: "%s"', model)
+        logger.info("Environment validation completed successfully")
+        return EnvValidationResult(
+            files_path=files_path,
+            anthropic_key=anthropic_key,
+            model=model,
+        )
+
+    def _resolve_model(self, value: object) -> str:
+        if self._has_value(value):
+            return str(value).strip()
+
+        logger.warning(
+            'Environment value "%s" is missing or empty. Using default model "%s"',
+            MODEL_ENV_KEY,
+            DEFAULT_MODEL,
+        )
+        return DEFAULT_MODEL
+
+    @staticmethod
+    def _has_value(value: object) -> bool:
+        return isinstance(value, str) and bool(value.strip())
+
+    @staticmethod
+    def _normalize_path(raw_path: str) -> Path:
+        path = Path(raw_path.strip()).expanduser()
+        return path.resolve(strict=False)

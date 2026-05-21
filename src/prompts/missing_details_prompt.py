@@ -20,11 +20,18 @@ ALLOWED_CATEGORIES = [
 ]
 
 
+SYSTEM_PROMPT = """
+You are an operations quality-control assistant for a moving company.
+You compare Aircall call transcripts against SmartMoving CRM records.
+Return only valid JSON.
+Do not include explanations, markdown, or text outside the JSON response.
+Do not invent facts.
+""".strip()
+
+
 def build_prompt(transcript_text: str, crm_context: dict[str, Any]) -> str:
     return f"""
-You are an operations quality-control assistant for a moving company.
-
-Your task is to compare an Aircall call transcript against the current SmartMoving CRM data.
+Compare the Aircall call transcript against the current SmartMoving CRM data.
 
 Find operational facts that are mentioned in the call transcript but are missing, incomplete, or not reflected in the SmartMoving CRM data.
 

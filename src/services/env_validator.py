@@ -39,13 +39,10 @@ class EnvValidator:
         self.env_path = env_path
 
     def validate(self) -> EnvValidationResult:
-        logger.info('Validating environment values from "%s"', self.env_path)
+        logger.info("Validating environment values")
 
-        if not self.env_path.is_file():
-            logger.error('Environment file not found: "%s"', self.env_path)
-            raise EnvValidationError(f'Environment file "{self.env_path}" is not found')
+        env_values = self._load_env_values()
 
-        env_values = dotenv_values(self.env_path)
         missing_keys = [
             env_key
             for env_key in self.REQUIRED_ENV_KEYS
@@ -77,6 +74,27 @@ class EnvValidator:
             anthropic_key=anthropic_key,
             model=model,
         )
+
+    def _load_env_values(self) -> dict[str, str | None]:
+        if self.env_path.is_file():
+            logger.info('Loading environment values from "%s"', self.env_path)
+            env_values = dict(dotenv_values(self.env_path))
+        else:
+            logger.info(
+                'Environment file "%s" was not found. Using process environment.',
+                self.env_path,
+            )
+            env_values = {}
+
+        for env_key in (
+            FILES_PATH_ENV_KEY,
+            ANTHROPIC_KEY_ENV_KEY,
+            MODEL_ENV_KEY,
+        ):
+            if env_key in os.environ:
+                env_values[env_key] = os.environ[env_key]
+
+        return env_values
 
     def _resolve_files_path(self, value: object) -> Path:
         if self._has_value(value):

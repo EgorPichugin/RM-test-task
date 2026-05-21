@@ -80,7 +80,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
 
     indent = 2 if args.pretty else None
-    json_output = json.dumps(result.findings, indent=indent)
+    json_output = json.dumps({"findings": result.findings}, indent=indent)
 
     try:
         JsonOutputWriter(base_path=env_result.files_path).write_json_output(

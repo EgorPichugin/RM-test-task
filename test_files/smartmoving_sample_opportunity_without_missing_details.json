@@ -1,0 +1,189 @@
+{
+  "id": "8a4c92e1-7f3d-4b88-9c25-b45b00d8a3f1",
+  "quoteNumber": 89417,
+  "status": 4,
+  "statusName": "Booked",
+  "type": 1,
+  "typeName": "Moving",
+  "createdAt": "2026-04-22T18:14:32Z",
+  "updatedAt": "2026-05-05T20:15:00Z",
+  "serviceDate": 20260510,
+  "moveSize": "2 Bedrooms",
+  "moveSizeId": "2br",
+  "branch": {
+    "id": "b00959a6-0f04-4069-ae11-af2001415fd9",
+    "name": "Royal Moving LA"
+  },
+  "tariff": {
+    "id": "rmc-la-local-2026",
+    "name": "RMC Los Angeles"
+  },
+  "customer": {
+    "id": "c91a4d72-58e6-4a17-b02d-b42c00f9d287",
+    "firstName": "John",
+    "lastName": "Sample",
+    "phoneNumber": "+13235551842",
+    "emailAddress": "john.sample@example.com"
+  },
+  "salesPerson": {
+    "id": "u-nicole-001",
+    "name": "Nicole Bennett",
+    "email": "nicole@royalmovingco.example"
+  },
+  "leadSource": {
+    "name": "Google Search"
+  },
+  "tags": [],
+  "estimatedTotal": 3417.0,
+  "subtotal": 3417.0,
+  "discount": 0.0,
+  "salesTax": 0.0,
+  "jobs": [
+    {
+      "id": "j-892a4c12-bb74-4a10-9e3f-b45b00d8a3f4",
+      "jobNumber": "89417-1",
+      "type": 1,
+      "typeName": "Moving",
+      "serviceDate": 20260510,
+      "confirmed": true,
+      "scheduled": true,
+      "arrivalWindow": "8:00 AM - 9:00 AM",
+      "estimatedDuration": "5h",
+      "crewSize": 3,
+      "truckCount": 1,
+      "estimatedCharges": 3417.0,
+      "stops": [
+        {
+          "order": 1,
+          "type": "Origin",
+          "addressFullAddress": "2418 Beachwood Drive, Los Angeles, CA 90068",
+          "addressUnit": null,
+          "propertyType": 2,
+          "propertyTypeName": "House",
+          "stairs": 1,
+          "hasElevator": false,
+          "parkingDescription": "Driveway, two-car",
+          "notes": "Peloton Bike Plus is in upstairs bedroom on second floor; approx. 140 lbs. Customer asked whether it may need disassembly; crew to assess on-site. Customer also has a 75-gallon saltwater fish tank; customer will drain it, tank must be fully dry before crew arrives, wrap and handle carefully."
+        },
+        {
+          "order": 2,
+          "type": "Destination",
+          "addressFullAddress": "1207 Elm Street, Santa Monica, CA 90403",
+          "addressUnit": "Unit 408",
+          "propertyType": 1,
+          "propertyTypeName": "Apartment",
+          "stairs": 0,
+          "hasElevator": true,
+          "parkingDescription": "Street parking; building/service access is via rear service entrance off alley, not front entrance.",
+          "notes": "Destination building entrance is around the back; movers must use service entrance off the alley. Building manager requires COI sent to manager@elmtowers.example.com at least 48 hours before move-in. Freight elevator reserved/available 10:00 AM - 2:00 PM; movers may not use regular elevator. Mother-in-law will let crew in at destination and mainly speaks Russian."
+        }
+      ],
+      "notes": {
+        "internalNotes": "Customer found us via Google. 2BR move within LA area. Booked 4/22. Customer called to add operational details: Peloton Bike Plus upstairs bedroom approx. 140 lbs; 75-gallon saltwater fish tank to be drained by customer and moved empty; destination access via rear service entrance off alley; COI required by building manager at manager@elmtowers.example.com at least 48 hours before move-in; freight elevator must be used 10 AM - 2 PM; regular elevator not allowed; mother-in-law will be at destination and mainly speaks Russian; customer plans to pay by credit card on move day with 3% processing fee.",
+        "customerNotes": "Hi John, thank you for choosing Royal Moving! Your move is confirmed for May 10, 8-9 AM arrival window. We noted the Peloton Bike Plus, empty 75-gallon fish tank, rear service entrance, COI requirement, freight elevator window 10 AM - 2 PM, Russian-speaking destination contact, and credit-card payment with 3% processing fee.",
+        "crewNotes": "2BR house to apartment. Standard 3-man crew, 1 truck. Origin: Peloton Bike Plus in upstairs bedroom, approx. 140 lbs; assess whether disassembly is needed. Origin: 75-gallon saltwater fish tank will be drained by customer; move empty glass tank only, must be dry, wrap carefully. Destination: use rear service entrance off alley only; regular elevator not allowed; freight elevator window 10 AM - 2 PM. Mother-in-law will let crew in and mainly speaks Russian.",
+        "crewFeedback": "",
+        "dispatcherNotes": "Send COI to manager@elmtowers.example.com at least 48 hours before move-in. Confirm freight elevator 10 AM - 2 PM and service entrance off alley with building manager.",
+        "accountingNotes": "Customer plans to pay by credit card on move day; add 3% processing fee to final total."
+      },
+      "charges": [
+        {
+          "name": "Moving Labor",
+          "rate": "5h @ $189/hr (1 truck, 3 crew)",
+          "subtotal": 945.0,
+          "discount": 0.0,
+          "totalCost": 945.0
+        },
+        {
+          "name": "Travel Fee",
+          "rate": "Flat",
+          "subtotal": 95.0,
+          "discount": 0.0,
+          "totalCost": 95.0
+        },
+        {
+          "name": "Materials & Packing Supplies",
+          "rate": "Estimated; includes careful wrapping for empty 75-gallon fish tank",
+          "subtotal": 180.0,
+          "discount": 0.0,
+          "totalCost": 180.0
+        },
+        {
+          "name": "Full Value Protection",
+          "rate": "Standard",
+          "subtotal": 197.0,
+          "discount": 0.0,
+          "totalCost": 197.0
+        },
+        {
+          "name": "Double Drive Time (DDT)",
+          "rate": "Per CPUC",
+          "subtotal": 0.0,
+          "discount": 0.0,
+          "totalCost": 0.0
+        },
+        {
+          "name": "Overtime Rate (after 8 hours)",
+          "rate": "1.5x per hour",
+          "subtotal": 0.0,
+          "discount": 0.0,
+          "totalCost": 0.0
+        },
+        {
+          "name": "Heavy Items Fee",
+          "rate": "Peloton Bike Plus approx. 140 lbs; fish tank fragile handling noted",
+          "subtotal": 0.0,
+          "discount": 0.0,
+          "totalCost": 0.0
+        },
+        {
+          "name": "Credit Card Processing Fee",
+          "rate": "3% added on move day if customer pays by credit card",
+          "subtotal": 0.0,
+          "discount": 0.0,
+          "totalCost": 0.0
+        },
+        {
+          "name": "COI / Building Requirements",
+          "rate": "COI required; send to manager@elmtowers.example.com 48 hours before move-in",
+          "subtotal": 0.0,
+          "discount": 0.0,
+          "totalCost": 0.0
+        },
+        {
+          "name": "Estimated Move Day Total",
+          "rate": "",
+          "subtotal": 3417.0,
+          "discount": 0.0,
+          "totalCost": 3417.0
+        }
+      ],
+      "inventory": {
+        "totalVolumeCuFt": 145,
+        "totalWeightLbs": 290,
+        "rooms": [
+          {
+            "name": "Upstairs Bedroom",
+            "itemCount": 1
+          },
+          {
+            "name": "Fish Tank / Fragile Items",
+            "itemCount": 1
+          }
+        ],
+        "items": [
+          {
+            "name": "Peloton Bike Plus",
+            "quantity": 1,
+            "estimatedWeightLbs": 140
+          },
+          {
+            "name": "Saltwater fish tank, 75 gallon, empty glass tank",
+            "quantity": 1,
+            "estimatedWeightLbs": 150
+          }
+        ]
+      }
+    }
+  ]
+}

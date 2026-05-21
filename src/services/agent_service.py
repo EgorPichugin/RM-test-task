@@ -193,8 +193,6 @@ Previous response:
         if not response_text:
             logger.error("LLM response did not contain text content")
             raise AgentServiceError("LLM response did not contain text content")
-
-        logger.info("Raw LLM response: %s", response_text)
         return response_text
 
     @staticmethod

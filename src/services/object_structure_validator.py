@@ -143,9 +143,7 @@ class ObjectStructureValidator:
                 isinstance(data.get("duration"), int),
                 isinstance(data.get("contact"), dict),
                 isinstance(data.get("user"), dict),
-                self._has_nested_dict(data, ["transcription", "content"]),
-                self._has_list(data, ["transcription", "content", "utterances"]),
-                self._has_aircall_utterance_shape(data),
+                self._has_valid_optional_aircall_transcription(data),
             ]
         )
 
@@ -166,6 +164,35 @@ class ObjectStructureValidator:
             data,
             ["transcription", "content", "utterances"],
         )
+        if not isinstance(utterances, list):
+            return False
+
+        return all(
+            isinstance(utterance, dict)
+            and isinstance(utterance.get("speaker"), str)
+            and isinstance(utterance.get("text"), str)
+            for utterance in utterances
+        )
+
+    def _has_valid_optional_aircall_transcription(self, data: dict[str, Any]) -> bool:
+        transcription = data.get("transcription")
+        if transcription is None:
+            return True
+
+        if not isinstance(transcription, dict):
+            return False
+
+        content = transcription.get("content")
+        if content is None:
+            return True
+
+        if not isinstance(content, dict):
+            return False
+
+        utterances = content.get("utterances")
+        if utterances is None:
+            return True
+
         if not isinstance(utterances, list):
             return False
 

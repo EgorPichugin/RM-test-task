@@ -10,7 +10,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Create a `.env` file:
+Provide configuration through environment variables or an optional `.env` file:
 
 ```env
 ANTHROPIC_KEY=your_anthropic_key
@@ -18,7 +18,7 @@ FILES_PATH=test_files
 MODEL=claude-haiku-4-5-20251001
 ```
 
-`FILES_PATH` and `MODEL` are optional. If `FILES_PATH` is empty or missing, the app uses `./test_files`. If `MODEL` is empty or missing, the app uses `claude-haiku-4-5-20251001`.
+`ANTHROPIC_KEY` is required. `.env` is not required if `ANTHROPIC_KEY` is already set in the process environment. `FILES_PATH` and `MODEL` are optional. If `FILES_PATH` is empty or missing, the app uses `./test_files`. If `MODEL` is empty or missing, the app uses `claude-haiku-4-5-20251001`.
 
 ## How To Run
 

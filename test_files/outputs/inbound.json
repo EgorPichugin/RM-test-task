@@ -1,51 +1,53 @@
-[
-  {
-    "category": "HEAVY_ITEMS",
-    "summary": "Peloton Bike Plus (140 lbs) on second floor not recorded in CRM inventory",
-    "quote": "So first, my wife and I just realized we have this Peloton in the upstairs bedroom that we forgot to tell you about. It's the bigger one, the Bike Plus, I think it weighs around 140 pounds.",
-    "confidence": "high",
-    "quote_verified": true
-  },
-  {
-    "category": "ACCESS",
-    "summary": "Destination building has service entrance off alley (not front entrance) that must be used by movers",
-    "quote": "The destination address, the one in Santa Monica, the building entrance is actually around the back, not the front like Google Maps shows. There's a service entrance off the alley. The building manager said the movers have to use that one.",
-    "confidence": "high",
-    "quote_verified": true
-  },
-  {
-    "category": "BUILDING_MGMT",
-    "summary": "Certificate of Insurance required by building manager, must be sent to manager@elmtowers.example.com at least 48 hours before move",
-    "quote": "First, they need a Certificate of Insurance, a COI, before move-in day. They were really firm about that. They want it sent to manager@elmtowers.example.com at least 48 hours before.",
-    "confidence": "high",
-    "quote_verified": true
-  },
-  {
-    "category": "BUILDING_MGMT",
-    "summary": "Freight elevator must be reserved and used between 10 am and 2 pm; regular elevator cannot be used",
-    "quote": "Second, the freight elevator has to be reserved between 10 am and 2 pm. They won't let movers use the regular elevator at all.",
-    "confidence": "high",
-    "quote_verified": true
-  },
-  {
-    "category": "COMMUNICATION_PREFS",
-    "summary": "Mother-in-law will be at destination and primarily speaks Russian; crew has Russian-speaking members available",
-    "quote": "My mother-in-law is going to be at the destination to let the crew in. She doesn't speak much English. She speaks Russian mainly.",
-    "confidence": "high",
-    "quote_verified": false
-  },
-  {
-    "category": "SPECIAL_HANDLING",
-    "summary": "75-gallon saltwater fish tank (empty, customer will drain) needs to be moved; must be fully dry before arrival",
-    "quote": "We have a saltwater fish tank, it's a 75 gallon tank. We're going to drain it ourselves but the tank itself, the empty glass tank, do you guys move that?",
-    "confidence": "high",
-    "quote_verified": true
-  },
-  {
-    "category": "PAYMENT",
-    "summary": "Customer will pay by credit card on move day with 3% processing fee added to final total",
-    "quote": "We're planning to pay by credit card on the day. Is there a fee for that or is that included?",
-    "confidence": "high",
-    "quote_verified": true
-  }
-]
+{
+  "findings": [
+    {
+      "category": "HEAVY_ITEMS",
+      "summary": "Peloton Bike Plus (140 lbs) on second floor not recorded in CRM inventory",
+      "quote": "So first, my wife and I just realized we have this Peloton in the upstairs bedroom that we forgot to tell you about. It's the bigger one, the Bike Plus, I think it weighs around 140 pounds.",
+      "confidence": "high",
+      "quote_verified": true
+    },
+    {
+      "category": "ACCESS",
+      "summary": "Destination building entrance is at service entrance off alley, not front entrance as shown in maps",
+      "quote": "The destination address, the one in Santa Monica, the building entrance is actually around the back, not the front like Google Maps shows. There's a service entrance off the alley.",
+      "confidence": "high",
+      "quote_verified": true
+    },
+    {
+      "category": "BUILDING_MGMT",
+      "summary": "Certificate of Insurance required 48 hours before move-in, must be sent to manager@elmtowers.example.com",
+      "quote": "They need a Certificate of Insurance, a COI, before move-in day. They were really firm about that. They want it sent to manager@elmtowers.example.com at least 48 hours before.",
+      "confidence": "high",
+      "quote_verified": false
+    },
+    {
+      "category": "BUILDING_MGMT",
+      "summary": "Freight elevator must be reserved and used between 10 am and 2 pm; regular elevator not permitted",
+      "quote": "The freight elevator has to be reserved between 10 am and 2 pm. They won't let movers use the regular elevator at all.",
+      "confidence": "high",
+      "quote_verified": false
+    },
+    {
+      "category": "COMMUNICATION_PREFS",
+      "summary": "Mother-in-law will be at destination and speaks primarily Russian; crew has Russian-speaking members available",
+      "quote": "My mother-in-law is going to be at the destination to let the crew in. She doesn't speak much English. She speaks Russian mainly.",
+      "confidence": "high",
+      "quote_verified": false
+    },
+    {
+      "category": "SPECIAL_HANDLING",
+      "summary": "75-gallon saltwater fish tank (empty, customer-drained) requires careful wrapping and must be fully dry",
+      "quote": "We have a saltwater fish tank, it's a 75 gallon tank. We're going to drain it ourselves but the tank itself, the empty glass tank, do you guys move that?",
+      "confidence": "high",
+      "quote_verified": true
+    },
+    {
+      "category": "PAYMENT",
+      "summary": "3% credit card processing fee will be added to final total on move day",
+      "quote": "Credit card payment is fine, there's a small processing fee of three percent that gets added on the day of.",
+      "confidence": "high",
+      "quote_verified": true
+    }
+  ]
+}

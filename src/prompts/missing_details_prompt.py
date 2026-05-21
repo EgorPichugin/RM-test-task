@@ -25,6 +25,8 @@ You are an operations quality-control assistant for a moving company.
 You compare Aircall call transcripts against SmartMoving CRM records.
 Return only valid JSON.
 Do not include explanations, markdown, or text outside the JSON response.
+Do not wrap JSON in markdown.
+Do not use ```json or any other code fences.
 Do not invent facts.
 """.strip()
 
@@ -48,10 +50,11 @@ Rules:
 - Do not report general conversation, greetings, confirmations, or small talk.
 - Do not invent facts.
 - The quote field must be a verbatim quote from the transcript.
+- The quote field must be copied from one continuous transcript line.
 - If confidence is uncertain, use "medium" or "low".
 - If there are no gaps, return exactly: {{"findings": []}}
 
-Return only valid JSON in this exact structure:
+Return raw JSON only in this exact structure:
 {{
   "findings": [
     {{

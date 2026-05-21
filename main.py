@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from src.config.logging_config import setup_logging
+from src.services.agent_service import AgentService, AgentServiceError
 from src.services.context_extractor import ContextExtractionError, ContextExtractor
 from src.services.customer_identity_validator import (
     CustomerIdentityValidationError,
@@ -14,7 +15,8 @@ from src.services.customer_identity_validator import (
 )
 from src.services.env_validator import EnvValidationError, EnvValidator
 from src.services.file_path_validator import FilePathValidationError, FilePathValidator
-from src.services.main_manager import MainManagerService
+from src.services.json_output_writer import JsonOutputWriter, JsonOutputWriterError
+from src.services.main_manager import MainManagerResult, MainManagerService
 from src.services.object_structure_validator import (
     ObjectStructureValidationError,
     ObjectStructureValidator,
@@ -59,26 +61,37 @@ def main(argv: Sequence[str] | None = None) -> int:
         customer_identity_validator=CustomerIdentityValidator(),
         context_extractor=ContextExtractor(),
         precheck_service=PreCheckService(),
+        agent_service=AgentService(
+            anthropic_key=env_result.anthropic_key,
+            model=env_result.model,
+        ),
     )
 
     try:
-        result = manager.run(args.input_files)
+        result: MainManagerResult = manager.run(args.input_files)
     except (
         FilePathValidationError,
         ObjectStructureValidationError,
         CustomerIdentityValidationError,
         ContextExtractionError,
+        AgentServiceError,
     ) as error:
         print(str(error), file=sys.stderr)
         return 1
 
     indent = 2 if args.pretty else None
-    print(
-        json.dumps(
-            result.to_dict(),
-            indent=indent,
+    json_output = json.dumps(result.findings, indent=indent)
+
+    try:
+        JsonOutputWriter(base_path=env_result.files_path).write_json_output(
+            file_name=f"{result.direction.value}.json",
+            json_output=json_output,
         )
-    )
+    except JsonOutputWriterError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+
+    print(json_output)
     return 0
 
 

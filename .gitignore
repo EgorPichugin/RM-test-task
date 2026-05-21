@@ -23,6 +23,3 @@ htmlcov/
 .vscode/
 .DS_Store
 Thumbs.db
-
-# Test
-test_files/
